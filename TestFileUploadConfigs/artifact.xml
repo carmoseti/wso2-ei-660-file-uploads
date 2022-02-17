@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><artifacts>
+    <artifact name="TestFileUploadAPI_v1" groupId="com.carlton.test.api" version="v1" type="synapse/api" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/api/TestFileUploadAPI_v1.xml</file>
+    </artifact>
+    <artifact name="TestFileUploadAPI_v1_swagger" groupId="com.carlton.test.metadata" version="v1" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/TestFileUploadAPI_v1_swagger.yaml</file>
+    </artifact>
+    <artifact name="TestFileUploadAPI_v1_metadata" groupId="com.carlton.test.metadata" version="v1" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/TestFileUploadAPI_v1_metadata.yaml</file>
+    </artifact>
+    <artifact name="FaultSequence" groupId="com.carlton.test.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/FaultSequence.xml</file>
+    </artifact>
+</artifacts>

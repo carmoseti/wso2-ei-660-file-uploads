@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/testFileUpload" name="TestFileUploadAPI" statistics="enable" trace="enable" xmlns="http://ws.apache.org/ns/synapse">
+    <resource faultSequence="FaultSequence" methods="POST" url-mapping="/single">
+        <inSequence>
+            <validate cache-schema="true">
+                <schema key="conf:/schema/SingleFileUpload.xsd"/>
+                <on-fail>
+                    <sequence key="FaultSequence"/>
+                </on-fail>
+            </validate>
+            <log description="Log Request" level="full" separator="&#xa;"/>
+            <payloadFactory description="XML response" media-type="xml">
+                <format>
+                    <response xmlns="">
+                        <status>$1</status>
+                        <message>$2</message>
+                        <request_data>$3</request_data>
+                    </response>
+                </format>
+                <args>
+                    <arg value="SUCCESS"/>
+                    <arg value="Request is received successfully!"/>
+                    <arg evaluator="xml" expression="$body/mediate/*"/>
+                </args>
+            </payloadFactory>
+            <property description="XML message type" name="messageType" scope="axis2" type="STRING" value="text/xml"/>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+    </resource>
+    <resource faultSequence="FaultSequence" methods="POST" url-mapping="/multiple">
+        <inSequence>
+            <validate cache-schema="true">
+                <schema key="conf:/schema/MultipleFileUpload.xsd"/>
+                <on-fail>
+                    <sequence key="FaultSequence"/>
+                </on-fail>
+            </validate>
+            <log description="Log Request" level="full" separator="&#xa;"/>
+            <payloadFactory description="XML response" media-type="xml">
+                <format>
+                    <response xmlns="">
+                        <status>$1</status>
+                        <message>$2</message>
+                        <request_data>$3</request_data>
+                    </response>
+                </format>
+                <args>
+                    <arg value="SUCCESS"/>
+                    <arg value="Request is received successfully!"/>
+                    <arg evaluator="xml" expression="$body/mediate/*"/>
+                </args>
+            </payloadFactory>
+            <property description="XML message type" name="messageType" scope="axis2" type="STRING" value="text/xml"/>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+    </resource>
+    <resource faultSequence="FaultSequence" methods="POST" url-mapping="/single/mimeType">
+        <inSequence>
+            <validate cache-schema="true">
+                <schema key="conf:/schema/SingleFileUpload.xsd"/>
+                <on-fail>
+                    <sequence key="FaultSequence"/>
+                </on-fail>
+            </validate>
+            <log description="Log Request" level="full" separator="&#xa;"/>
+            <payloadFactory media-type="xml">
+                <format>
+                    <root xmlns="">
+                        <file content-type="$3" filename="$2" xmlns="http://org.apache.axis2/xsd/form-data">$1</file>
+                    </root>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$body/mediate/file"/>
+                    <arg evaluator="xml" expression="$body/mediate/file/@filename"/>
+                    <arg evaluator="xml" expression="$body/mediate/file/@content-type"/>
+                </args>
+            </payloadFactory>
+            <header name="Content-Type" scope="transport" value="multipart/form-data"/>
+            <property name="messageType" scope="axis2" type="STRING" value="multipart/form-data"/>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+    </resource>
+    <resource faultSequence="FaultSequence" methods="POST" url-mapping="/multiple/mimeType">
+        <inSequence>
+            <validate cache-schema="true">
+                <schema key="conf:/schema/MultipleFileUpload.xsd"/>
+                <on-fail>
+                    <sequence key="FaultSequence"/>
+                </on-fail>
+            </validate>
+            <log description="Log Request" level="full" separator="&#xa;"/>
+            <xslt description="XSLT Transform" key="conf:xslt/MultipleFileTransform.xslt"/>
+            <header name="Content-Type" scope="transport" value="multipart/form-data"/>
+            <property name="messageType" scope="axis2" type="STRING" value="multipart/form-data"/>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+    </resource>
+</api>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="FaultSequence" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+    <payloadFactory description="System Error Response" media-type="json">
+        <format>{&#xd;
+  "status": "ERROR",&#xd;
+  "status_description": "System Error",&#xd;
+  "errors": [&#xd;
+    "System Error"&#xd;
+  ],&#xd;
+  "action": "SKY_ESB",&#xd;
+  "title": "System Error",&#xd;
+  "time": "$1",&#xd;
+  "error":{&#xd;
+"code":"$2",&#xd;
+"message":"$3"&#xd;
+}&#xd;
+}</format>
+        <args>
+            <arg evaluator="xml" expression="get-property(&quot;SYSTEM_DATE&quot;, &quot;yyyy-MM-dd HH:mm:ss&quot;)"/>
+            <arg evaluator="xml" expression="$ctx:ERROR_CODE"/>
+            <arg evaluator="xml" expression="$ctx:ERROR_MESSAGE"/>
+        </args>
+    </payloadFactory>
+    <property description="application/json" name="messageType" scope="axis2" type="STRING" value="application/json"/>
+    <respond/>
+</sequence>
