@@ -2,6 +2,13 @@
 <api context="/testFileUpload" name="TestFileUploadAPI" statistics="enable" trace="enable" xmlns="http://ws.apache.org/ns/synapse">
     <resource faultSequence="FaultSequence" methods="POST" url-mapping="/single">
         <inSequence>
+            <call-template description="MaxRequestSizeTemplate" target="MaxRequestSizeTemplate">
+                <with-param name="content_length" value="{$trp:Content-Length}"/>
+                <with-param name="maximum_request_size" value="1000000"/>
+            </call-template>
+            <log description="MRS_EXCEEDED" level="custom" separator="&#xa;&#xa;">
+                <property expression="$ctx:MRS_EXCEEDED" name="MRS_EXCEEDED"/>
+            </log>
             <validate cache-schema="true">
                 <schema key="conf:/schema/SingleFileUpload.xsd"/>
                 <on-fail>
@@ -65,7 +72,7 @@
                 </on-fail>
             </validate>
             <log description="Log Request" level="full" separator="&#xa;"/>
-            <payloadFactory media-type="xml">
+            <payloadFactory description="Files" media-type="xml">
                 <format>
                     <root xmlns="">
                         <file content-type="$3" filename="$2" xmlns="http://org.apache.axis2/xsd/form-data">$1</file>
@@ -77,8 +84,8 @@
                     <arg evaluator="xml" expression="$body/mediate/file/@content-type"/>
                 </args>
             </payloadFactory>
-            <header name="Content-Type" scope="transport" value="multipart/form-data"/>
-            <property name="messageType" scope="axis2" type="STRING" value="multipart/form-data"/>
+            <header description="Content-Type" name="Content-Type" scope="transport" value="multipart/form-data"/>
+            <property description="messageType" name="messageType" scope="axis2" type="STRING" value="multipart/form-data"/>
             <respond/>
         </inSequence>
         <outSequence/>

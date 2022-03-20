@@ -11,4 +11,7 @@
     <artifact name="FaultSequence" groupId="com.carlton.test.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
         <file>src/main/synapse-config/sequences/FaultSequence.xml</file>
     </artifact>
+    <artifact name="MaxRequestSizeTemplate" groupId="com.carlton.test.template" version="1.0.0" type="synapse/sequenceTemplate" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/templates/MaxRequestSizeTemplate.xml</file>
+    </artifact>
 </artifacts>
