@@ -23,4 +23,12 @@
             <properties/>
         </item>
     </artifact>
+    <artifact name="SinglePDFFileUpload" groupId="com.carlton.test.resource" version="1.0.0" type="registry/resource" serverRole="EnterpriseIntegrator">
+        <item>
+            <file>SinglePDFFileUpload.xsd</file>
+            <path>/_system/config/schema</path>
+            <mediaType>application/x-xsd+xml</mediaType>
+            <properties/>
+        </item>
+    </artifact>
 </artifacts>

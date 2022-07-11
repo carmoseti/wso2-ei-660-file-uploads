@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template name="MaxRequestSizeTemplate" xmlns="http://ws.apache.org/ns/synapse">
-    <parameter isMandatory="false" name="content_length"/>
-    <parameter isMandatory="false" name="maximum_request_size"/>
+    <parameter defaultValue="" isMandatory="false" name="content"/>
+    <parameter defaultValue="" isMandatory="false" name="maximum_request_size"/>
     <sequence>
         <propertyGroup description="FUNC to CTX">
-            <property expression="$func:content_length" name="MRS_FUNC_CONTENT_LENGTH" scope="default" type="INTEGER"/>
+            <property expression="$func:content" name="MRS_FUNC_CONTENT" scope="default" type="STRING"/>
             <property expression="$func:maximum_request_size" name="MRS_FUNC_MAX_REQUEST_SIZE" scope="default" type="INTEGER"/>
         </propertyGroup>
         <script description="Verify Request Size" language="js"><![CDATA[var MRS_EXCEEDED = false;
+var MRS_CONTENT_LENGTH = mc.getProperty("MRS_FUNC_CONTENT").length() / 1.36;
 
-if (mc.getProperty("MRS_FUNC_CONTENT_LENGTH") > mc.getProperty("MRS_FUNC_MAX_REQUEST_SIZE")){
+if (MRS_CONTENT_LENGTH > mc.getProperty("MRS_FUNC_MAX_REQUEST_SIZE")){
 MRS_EXCEEDED = true;
 }
 
+mc.setProperty('MRS_CONTENT',mc.getProperty("MRS_FUNC_CONTENT"));
+mc.setProperty('MRS_CONTENT_LENGTH',MRS_CONTENT_LENGTH);
 mc.setProperty('MRS_EXCEEDED',MRS_EXCEEDED);]]></script>
     </sequence>
     <description>MaxRequestSizeTemplate</description>
