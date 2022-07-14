@@ -2,6 +2,11 @@
 <api context="/testFileUpload" name="TestFileUploadAPI" statistics="enable" trace="enable" xmlns="http://ws.apache.org/ns/synapse">
     <resource faultSequence="FaultSequence" methods="POST" url-mapping="/single">
         <inSequence>
+            <log description="CONTENT_LENGTH" level="custom" separator="&#xa;&#xa;">
+                <property expression="$trp:Content-Length" name="TRP_CONTENT_LENGTH"/>
+                <property expression="$trp:X-Content-Length" name="TRP_X_CONTENT_LENGTH"/>
+                <property expression="$trp:Content-Type" name="TRP_CONTENT_TYPE"/>
+            </log>
             <validate cache-schema="true">
                 <schema key="conf:/schema/SingleFileUpload.xsd"/>
                 <on-fail>
@@ -9,14 +14,13 @@
                 </on-fail>
             </validate>
             <call-template description="MaxRequestSizeTemplate" target="MaxRequestSizeTemplate">
-                <with-param name="content" value="{$body/mediate/file}"/>
+                <with-param name="content_length" value="{$trp:Content-Length}"/>
                 <with-param name="maximum_request_size" value="1000000"/>
             </call-template>
             <log description="Log Request" level="full" separator="&#xa;"/>
             <log description="MRS_VARIABLES" level="custom" separator="&#xa;&#xa;">
                 <property expression="$ctx:MRS_EXCEEDED" name="MRS_EXCEEDED"/>
                 <property expression="$ctx:MRS_CONTENT_LENGTH" name="MRS_CONTENT_LENGTH"/>
-                <property expression="$ctx:MRS_CONTENT" name="MRS_CONTENT"/>
             </log>
             <payloadFactory description="XML response" media-type="xml">
                 <format>
